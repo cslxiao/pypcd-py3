@@ -209,7 +209,7 @@ def _build_dtype(metadata):
         else:
             fieldnames.extend(['%s_%04d' % (f, i) for i in xrange(c)])
             typenames.extend([np_type]*c)
-    print(set(zip(fieldnames, typenames)))
+    # print(set(zip(fieldnames, typenames)))
     dtype = np.dtype(list(zip(fieldnames, typenames)))
     return dtype
 
@@ -283,7 +283,7 @@ def point_cloud_from_fileobj(f):
         ln = f.readline().strip().decode('ascii')
         header.append(ln)
         if ln.startswith('DATA'):
-            print('starts with Data %s' % ln)
+            # print('starts with Data %s' % ln)
             metadata = parse_header(header)
             dtype = _build_dtype(metadata)
             break
