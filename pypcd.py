@@ -15,7 +15,7 @@ import copy
 from io import StringIO as sio
 import numpy as np
 import warnings
-import lzf
+
 
 HAS_SENSOR_MSGS = True
 try:
@@ -246,6 +246,7 @@ def parse_binary_pc_data(f, dtype, metadata):
 
 
 def parse_binary_compressed_pc_data(f, dtype, metadata):
+    import lzf
     """ Parse lzf-compressed data.
     Format is undocumented but seems to be:
     - compressed size of data (uint32)
@@ -728,11 +729,11 @@ class PointCloud(object):
         new_metadata = self.get_metadata()
         return PointCloud(new_metadata, new_pc_data)
 
-    def to_msg(self):
+    def to_msg(self, stamp=None, frame_id=None, merge_rgb=False):
         if not HAS_SENSOR_MSGS:
             raise Exception('ROS sensor_msgs not found')
         # TODO is there some metadata we want to attach?
-        return numpy_pc2.array_to_pointcloud2(self.pc_data)
+        return numpy_pc2.array_to_pointcloud2(self.pc_data, stamp, frame_id, merge_rgb)
 
     @staticmethod
     def from_path(fname):

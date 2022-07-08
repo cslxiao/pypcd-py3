@@ -1,12 +1,27 @@
 import pypcd
 import numpy as np
 import open3d
+import time
 
-pc = pypcd.PointCloud.from_path('0.pcd')
+st = time.time()
+for i in range(1):
+    pc = pypcd.PointCloud.from_path('0.pcd')
+    print(type(pc))
+    cloud = [list(p) for p in pc.pc_data[:]]
+    cloud = np.array(cloud)
+    cloud = cloud[~np.isnan(cloud).any(axis=1), :]
+print(time.time()-st)
 
-cloud = [list(p) for p in pc.pc_data[:]]
-cloud = np.array(cloud)
-cloud = cloud[~np.isnan(cloud).any(axis=1), :]
+
+st = time.time()
+for i in range(1):
+    pc = pypcd.PointCloud.from_path('0.pcd')
+   
+    cloud = pc.pc_data.view(np.float32).reshape(-1,4)
+    cloud = cloud[~np.isnan(cloud).any(axis=1), :]
+print(time.time()-st)
+
+
 pointcloud = open3d.geometry.PointCloud()
 pointcloud.points = open3d.utility.Vector3dVector(cloud[:,:3])
 intensity = cloud[:,3]
